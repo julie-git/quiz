@@ -40,7 +40,7 @@ var choiceboxE1 = document.getElementById("choicebox");
 var totalScore = 0;
 var highestScore = 0;
 var questPerMillisecond = 1500;
-var i = 0;
+var questionIndex = 0;
 
 // $.getScript("questions.js", function() {
 //   alert("Script loaded but not necessarily executed.");
@@ -122,18 +122,20 @@ function showquestions() {
   mainEl.append(bodyEl);
 
   var qInterval = setInterval(function() {
-    if (questions[i] === undefined || i >= questions.length) {
+    if (questions[questionIndex] === undefined || questionIndex >= questions.length) {
       clearInterval(qInterval);
     } else {
       mainEl.textContent = "";
-      console.log("showquestion i =" + i);
-      console.log(questions[i].title);
-       mainEl.textContent = questions[i].title;
+      console.log("showquestion i =" + questionIndex);
+      console.log(questions[questionIndex]);
+      // debugger;
+      console.log(questions[questionIndex].title);
+       mainEl.textContent = questions[questionIndex].title;
       //TO Do Display questions
-      console.log(questions[i].choices);
+      // console.log(questions[i].choices);
       displayChoices();
 
-       i++;
+       questionIndex++;
        
     }
 
@@ -142,10 +144,14 @@ function showquestions() {
 
 function displayChoices()
 {
-	var data=['Apple', 'Banana', 'Kiwi'];
+
+  // var data=['Apple', 'Banana', 'Kiwi'];
+   var data = questions[questionIndex].choices;
 	var output="";
 	var output2="";
-	var dataList;
+  var dataList;
+   console.log("displayChoices" + questionIndex );
+   console.log(questions[questionIndex].choices );
 	
 	for(var i=0; i< data.length; i++)
 	{
