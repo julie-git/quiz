@@ -1,5 +1,3 @@
-// var poem = "Some say the world will end in 🔥, Some say in ice. From what I’ve tasted of desire, I hold with those who favor fire. But if it had to perish twice, I think I know enough of hate. To say that for destruction ice, Is also great, And would suffice.";
-// var words = poem.split(" ");
 
 var questions = [
   {
@@ -19,11 +17,11 @@ var questions = [
   },
   {
       title: "What do you need to create make stuff happen when clicking on a button?",
-      choices: ["function", "event handler", "event listenter", "script"],
+      choices: ["function", "event handler", "event listener", "script"],
       answer: "event listener"
   },
   {
-    title: "What is Joes favorite color?",
+    title: "What is Joe's favorite color?",
     choices: ["chartruse", "magenta", "salmon", "turqoise"],
     answer: "salmon"
   }
@@ -35,12 +33,15 @@ var timerEl = document.getElementById("countdown");
 var bodyEl = document.createElement("div");
 var buttonEl = document.getElementById("startbtn");
 var choiceboxE1 = document.getElementById("choicebox");
-
+var totalScoreEl = document.getElementById("totalscore");
+var answerEl = document.getElementById("answerbox");
 
 var totalScore = 0;
 var highestScore = 0;
-var questPerMillisecond = 1500;
+var questPerMillisecond = 10000; //time between questions
 var questionIndex = 0;
+var userAnswer = "";
+
 
 // $.getScript("questions.js", function() {
 //   alert("Script loaded but not necessarily executed.");
@@ -48,10 +49,12 @@ var questionIndex = 0;
 
 // console.log(questions);
 // console.log(questions[0].title);
- console.log("questions[0].choices= "+ questions[0].choices);
- console.log("questions[0].choices[0] = " + questions[0].choices[0]);
+//  console.log("questions[0].choices= "+ questions[0].choices);
+//  console.log("questions[0].choices[0] = " + questions[0].choices[0]);
 // console.log(questions[0].answer);
-console.log("question 3 title:" +  questions[3].title);
+// console.log("question 3 title:" +  questions[3].title);
+console.log("questions.length="+ questions.length);
+console.log(answerEl);
 
 //Listen for Start quiz button event.  Display first question.
 buttonEl.addEventListener("click",startquiz);
@@ -59,14 +62,30 @@ buttonEl.addEventListener("click",startquiz);
 
 function startquiz() {
   console.log("startquiz");
+
   //hide button
   // buttonE.style.display = 'none';
   //display the total Score
+  totalScoreEl.textContent= "The Total Score: " + totalScore;
    showquestions();
     
   }
   
+  // function myTimer(){
+  //   qInterval= setInterval(decrement, questPerMillisecond);
+  //   var timer = 15;
+  //     function decrement(){
+  //       timer--;
+  //       console.log(timer);
+  //       timerEl.textContent = time + " seconds remaining to answer question";
+  //       //update screen with value of timer;
+  //      if (timer ===0){
+  //         console.log("timesup");
 
+  //       }
+  //     }
+    
+  // }
   
   //display the question
 
@@ -75,28 +94,28 @@ function startquiz() {
 
 
 
- function timerCountDown(i) {
-    var timeLeft = 15;
+//  function timerCountDown(i) {
+//     var timeLeft = 15;
   
-    var timeInterval = setInterval(function() {
-      timerEl.textContent = timeLeft + " seconds remaining to answer question";
+//     var timeInterval = setInterval(function() {
+//       timerEl.textContent = timeLeft + " seconds remaining to answer question";
 
       
-      // timeLeft--;
+//       // timeLeft--;
   
-      while (!timeLeft === 0) {
-        // timerEl.textContent = "";
-        showquestions(i);
-        timeLeft--;
-        // console.log("return from shoquest");
-        // clearInterval(timeInterval);
-      }
-      timerEl.textContent = "";
-      clearInterval(timeInterval);
+//       while (!timeLeft === 0) {
+//         // timerEl.textContent = "";
+//         showquestions(i);
+//         timeLeft--;
+//         // console.log("return from shoquest");
+//         // clearInterval(timeInterval);
+//       }
+//       timerEl.textContent = "";
+//       clearInterval(timeInterval);
       
-    }, 1000);
+//     }, 1000);
   
-  }
+//   }
 
 // function timerCountDown(i) {
 //   var timeLeft = 15;
@@ -116,68 +135,167 @@ function startquiz() {
 
 // }
 
+function myTimer(){
+  qInterval= setInterval(decrement, questPerMillisecond);
+  var timer = 2;
+    function decrement(){
+      timer--;
+      timerEl.textContent = timer + " seconds remaining to answer question";
+      console.log(timer);
+      if (timer === 0){
+        console.log("timesup");
+        clearInterval(qInterval);
+        checkAnswers;
+        // questionIndex++;
+        if (questionIndex < questions.length-1){
+          questionIndex++;
+           console.log("inside if questionIndex =" + questionIndex);
+          showquestions();
+        }else{
+          console.log("myTimer: quiz over");
+          clearInterval(qInterval);
+          quizOver();
+          //quiz over..do quiz end stuff
+        }
+        
+      }
+    }
+  
+}
+
 
 
 function showquestions() {
+  console.log("called showquestions");
+  myTimer();
   mainEl.append(bodyEl);
 
-  var qInterval = setInterval(function() {
-    if (questions[questionIndex] === undefined || questionIndex >= questions.length) {
-      clearInterval(qInterval);
-    } else {
+  // var qInterval = setInterval(function() {
+  //   if (questions[questionIndex] === undefined || questionIndex >= questions.length) {
+  //     clearInterval(qInterval);
+  //   } else {
       mainEl.textContent = "";
-      console.log("showquestion i =" + questionIndex);
+       console.log("showquestion questionIndex =" + questionIndex);
       console.log(questions[questionIndex]);
-      // debugger;
-      console.log(questions[questionIndex].title);
+  //     // debugger;
+  //     console.log("hi, ",questions[questionIndex].title);
        mainEl.textContent = questions[questionIndex].title;
-      //TO Do Display questions
-      // console.log(questions[i].choices);
-      displayChoices();
+       displayChoices();
+  //     //TO Do 
+  //     // console.log(questions[i].choices);
+  //     var returnAnswer = displayChoices();
+  //     console.log("returnAnswer =" + returnAnswer);
+  //     //To Do check answers update timers and score
+  //     clearInterval(qInterval);
+  //      questionIndex++;
+  //      showquestions()
+  //   }
 
-       questionIndex++;
-       
-    }
-
-  }, questPerMillisecond);
+  // }, questPerMillisecond);
 }
+
+// function displayChoices()
+// {
+
+//   // var data=['Apple', 'Banana', 'Kiwi'];
+//    var data = questions[questionIndex].choices;
+// 	var output="";
+// 	var output2="";
+//   var dataList;
+//    console.log("displayChoices" + questionIndex );
+//    console.log(questions[questionIndex].choices );
+	
+// 	for(var i=0; i< data.length; i++)
+// 	{
+// 		dataList=data[i];
+// 		//  output+= '<input type="checkbox" value='+dataList+' name="box2">'  + '   ' + dataList+'   '+'<br><br>';
+//     // output2+= 'yes:<input type="radio" value="yes" name="box2">'+'no:<input type="radio" value="yes" name="box2">'+'<br><br>';
+//     output2+= dataList + ':<input type="radio" value= '+dataList+' name= '+dataList+'>'+'<br><br>';
+// 		 document.getElementById("dataList").innerHTML=output;
+// 		document.getElementById("radioBtn").innerHTML=output2;
+// 	}
+// }
 
 function displayChoices()
 {
-
-  // var data=['Apple', 'Banana', 'Kiwi'];
-   var data = questions[questionIndex].choices;
+  var data = questions[questionIndex].choices;
 	var output="";
 	var output2="";
   var dataList;
+  choiceboxE1.textContent = '';
    console.log("displayChoices" + questionIndex );
    console.log(questions[questionIndex].choices );
-	
+  //  buttonContainer = document.getElementById('#choicebox');
+   var buttonsToCreate, buttonContainer, newButton;
 	for(var i=0; i< data.length; i++)
 	{
 		dataList=data[i];
-		//  output+= '<input type="checkbox" value='+dataList+' name="box2">'  + '   ' + dataList+'   '+'<br><br>';
-    // output2+= 'yes:<input type="radio" value="yes" name="box2">'+'no:<input type="radio" value="yes" name="box2">'+'<br><br>';
-    output2+= dataList + ':<input type="radio" value= '+dataList+' name= '+dataList+'>'+'<br><br>';
-		 document.getElementById("dataList").innerHTML=output;
-		document.getElementById("radioBtn").innerHTML=output2;
+		newButton = document.createElement('input');
+          newButton.type = 'button';
+          newButton.value = data[i];
+          newButton.id = data[i];
+          newButton.onclick = function () {
+            console.log('You pressed '+this.id);
+            console.log('You pressed '+this.value);
+            return this.value;
+            
+          };
+          choiceboxE1.append(newButton);
 	}
 }
-// function speedRead() {
-//   mainEl.append(bodyEl);
 
-//   var poemInterval = setInterval(function() {
-//     if (words[i] === undefined) {
-//       clearInterval(poemInterval);
-//     } else {
-//       //  mainEl.textContent = words[i];
-      
-//       i++;
-//     }
+function checkAnswers(){
+   var questionAnswer = questions[questionIndex].answer;
+   console.log("checkAnswer: questionAnswer=" + questionAnswer)
+   console.log("checkAnswer: userAnswer=" + userAnswer);
+  if (userAnswer === questionAnswer){
+      totalScore++;
+      console.log("checkAnswer: totalScore" + totalScore);
+      answerEl.textContent = "Correct";
+      // alert("Answer was Correct!!");
+   }else{
+    //  alert("Answer is wrong!!");
+      answerEl.textContent = "Wrong";
+   }
+    updateTotalScore();
+    userAnswer = "";
+    if (questionIndex < questions.length-1){
+      questionIndex++;
+    }
+    clearInterval(qInterval);
+}
 
-//   }, wordsPerMillisecond);
-// }
+function updateTotalScore(){
+  totalScoreEl.textContent= "The Total Score: " + totalScore;
+}
 
-// prepareRead();
+//Event Lister to check if an answer is clicked.
+document.body.addEventListener("click", event => {
+  if (event.target.nodeName == "INPUT") {
+    console.log("Clicked", event.target.value);
+    userAnswer = event.target.value;
+    console.log("userAnser = " + userAnswer);
+    clearInterval(qInterval);
+    
+    //call function to check answer and update scores
+    checkAnswers();
+    showquestions();
+  }
+});
+
+function quizOver(){
+   mainEl.textContent = "QUIZ COMPLETE!!";
+  //  choiceboxE1.textContent="Your Final Score = " + totalScore;
+   timerEl.textContent="";
+   answerEl.textContent = "";
+  //Enter Initials into form
+   var input = document.createElement("input");
+   input.type = "text";
+   input.name = "initials";
+   input.label = "Enter Initials";
+   answerEl.append(input);
+}
+
+
 
 
