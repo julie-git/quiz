@@ -35,6 +35,7 @@ var buttonEl = document.getElementById("startbtn");
 var choiceboxE1 = document.getElementById("choicebox");
 var totalScoreEl = document.getElementById("totalscore");
 var answerEl = document.getElementById("answerbox");
+var welcomeEl = document.querySelector("h1");
 
 var totalScore = 0;
 var highestScore = 0;
@@ -44,141 +45,23 @@ var userAnswer = "";
 var totalSeconds = 75;
 var secondsElapsed = 0;
 var qinterval;
-var secondsLeft;
+var secondsLeft = totalSeconds;
 
 
 // $.getScript("questions.js", function() {
 //   alert("Script loaded but not necessarily executed.");
 // });
-
+console.log(welcomeEl);
 // console.log(questions);
 // console.log(questions[0].title);
 //  console.log("questions[0].choices= "+ questions[0].choices);
 //  console.log("questions[0].choices[0] = " + questions[0].choices[0]);
 // console.log(questions[0].answer);
 // console.log("question 3 title:" +  questions[3].title);
-console.log("questions.length="+ questions.length);
-console.log(answerEl);
-
-//Listen for Start quiz button event.  Display first question.
-//buttonEl.addEventListener("click",startquiz);
-buttonEl.addEventListener("click",function(event){
-   event.preventDefault();
-   timerEl.textContent = totalSeconds + " seconds remaining to complete quiz";
-   startTimer();
-    showquestions();
-  
-});
-    
-
- 
-
-// function startquiz() {
-//   console.log("startquiz");
-
-//   //hide button
-//   // buttonE.style.display = 'none';
-//   //display the total Score
-//   totalScoreEl.textContent= "The Total Score: " + totalScore;
-  
-//   startTimer();
-//   setTimeout(function(){ showquestions() }, 1000)
-//   // showquestions();
-    
-//   }
-  
-  // function myTimer(){
-  //   qInterval= setInterval(decrement, questPerMillisecond);
-  //   var timer = 15;
-  //     function decrement(){
-  //       timer--;
-  //       console.log(timer);
-  //       timerEl.textContent = time + " seconds remaining to answer question";
-  //       //update screen with value of timer;
-  //      if (timer ===0){
-  //         console.log("timesup");
-
-  //       }
-  //     }
-    
-  // }
-  
-  //display the question
+// console.log("questions.length="+ questions.length);
+// console.log(answerEl);
 
 
-
-
-
-
-//  function timerCountDown(i) {
-//     var timeLeft = 15;
-  
-//     var timeInterval = setInterval(function() {
-//       timerEl.textContent = timeLeft + " seconds remaining to answer question";
-
-      
-//       // timeLeft--;
-  
-//       while (!timeLeft === 0) {
-//         // timerEl.textContent = "";
-//         showquestions(i);
-//         timeLeft--;
-//         // console.log("return from shoquest");
-//         // clearInterval(timeInterval);
-//       }
-//       timerEl.textContent = "";
-//       clearInterval(timeInterval);
-      
-//     }, 1000);
-  
-//   }
-
-// function timerCountDown(i) {
-//   var timeLeft = 15;
-
-//   var timeInterval = setInterval(function() {
-//     timerEl.textContent = timeLeft + " seconds remaining to answer question";
-//     timeLeft--;
-
-//     if (!timeLeft === 0) {
-//       // timerEl.textContent = "";
-//       showquestions(i);
-//       console.log("return from shoquest");
-//       clearInterval(timeInterval);
-//     }
-
-//   }, 1000);
-
-// }
-
-// function myTimer(){
-//   clearInterval(qinterval);
-//   qInterval= setInterval(decrement, questPerMillisecond);
-//   var timer = 2;
-//     function decrement(){
-//       timer--;
-//       timerEl.textContent = timer + " seconds remaining to answer question";
-//       console.log(timer);
-//       if (timer === 0){
-//         console.log("timesup");
-//         clearInterval(qInterval);
-//         checkAnswers;
-//         // questionIndex++;
-//         if (questionIndex < questions.length-1){
-//           questionIndex++;
-//            console.log("inside if questionIndex =" + questionIndex);
-//           showquestions();
-//         }else{
-//           console.log("myTimer: quiz over");
-//           clearInterval(qInterval);
-//           quizOver();
-//           //quiz over..do quiz end stuff
-//         }
-        
-//       }
-//     }
-  
-// }
 
 
 function startTimer() {
@@ -191,13 +74,16 @@ function startTimer() {
       console.log('secondsElapsed =' +secondsElapsed )
       secondsLeft = totalSeconds - secondsElapsed;
       console.log('secondsLeft =' +secondsLeft );
-      timerEl.textContent = secondsLeft + " seconds remaining to complete quiz";
+      showTime();
+      // timerEl.textContent = secondsLeft + " seconds remaining to complete quiz";
       // showquestions();
       if(totalSeconds-secondsElapsed<=0 ){
         clearInterval(qinterval);
          console.log("quiz over");
+         quizOver();
       }
-      timerEl.textContent = secondsLeft + " seconds remaining to complete quiz";
+      // timerEl.textContent = secondsLeft + " seconds remaining to complete quiz";
+      showTime();
     },1000)
     // showquestions();
   }
@@ -221,41 +107,12 @@ function showquestions() {
   }else{
     console.log("end of questions");
     clearInterval(qinterval);
+    quizOver();
    }
-  //     //TO Do 
-  //     // console.log(questions[i].choices);
-  //     var returnAnswer = displayChoices();
-  //     console.log("returnAnswer =" + returnAnswer);
-  //     //To Do check answers update timers and score
-  //     clearInterval(qInterval);
-  //      questionIndex++;
-  //      showquestions()
-  //   }
-
-  // }, questPerMillisecond);
+  
 }
 
-// function displayChoices()
-// {
 
-//   // var data=['Apple', 'Banana', 'Kiwi'];
-//    var data = questions[questionIndex].choices;
-// 	var output="";
-// 	var output2="";
-//   var dataList;
-//    console.log("displayChoices" + questionIndex );
-//    console.log(questions[questionIndex].choices );
-	
-// 	for(var i=0; i< data.length; i++)
-// 	{
-// 		dataList=data[i];
-// 		//  output+= '<input type="checkbox" value='+dataList+' name="box2">'  + '   ' + dataList+'   '+'<br><br>';
-//     // output2+= 'yes:<input type="radio" value="yes" name="box2">'+'no:<input type="radio" value="yes" name="box2">'+'<br><br>';
-//     output2+= dataList + ':<input type="radio" value= '+dataList+' name= '+dataList+'>'+'<br><br>';
-// 		 document.getElementById("dataList").innerHTML=output;
-// 		document.getElementById("radioBtn").innerHTML=output2;
-// 	}
-// }
 
 function displayChoices()
 {
@@ -288,6 +145,10 @@ function displayChoices()
   // totalSeconds = 0;
 }
 
+function showTime(){
+  timerEl.textContent = "Time : " + secondsLeft;
+}
+
 function checkAnswers(){
    var questionAnswer = questions[questionIndex].answer;
    console.log("checkAnswer: questionAnswer=" + questionAnswer)
@@ -299,7 +160,9 @@ function checkAnswers(){
       // alert("Answer was Correct!!");
    }else{
     //  alert("Answer is wrong!!");
-      answerEl.textContent = "Wrong";
+      answerEl.textContent = "That answer is incorrect.";
+      //deduct 15 seconds from totalTime as penalty
+      totalSeconds = totalSeconds -15;
    }
     updateTotalScore();
     userAnswer = "";
@@ -314,6 +177,36 @@ function checkAnswers(){
 function updateTotalScore(){
   totalScoreEl.textContent= "The Total Score: " + totalScore;
 }
+
+function quizOver(){
+  mainEl.textContent = "QUIZ COMPLETE!!";
+ //  choiceboxE1.textContent="Your Final Score = " + totalScore;
+  timerEl.textContent="";
+  answerEl.textContent = "";
+  choiceboxE1.innerHTML = "";
+ //Enter Initials into form
+  var input = document.createElement("input");
+  input.type = "text";
+  input.name = "initials";
+  input.label = "Enter Initials";
+  var labelinit = document.createElement("Label");
+  labelinit.innerHTML = "Enter Initials";
+  answerEl.append(input);
+  answerEl.prepend(labelinit);
+}
+
+
+//Listen for Start quiz button event.  Display first question, start timer
+//buttonEl.addEventListener("click",startquiz);
+buttonEl.addEventListener("click",function(event){
+  event.preventDefault();
+  buttonEl.style.visibility = 'hidden'; // hide Start Quiz button
+  welcomeEl.textContent = "";
+  showTime();
+  startTimer();
+  showquestions();
+ 
+});
 
 //Event Lister to check if an answer is clicked.
 document.body.addEventListener("click", event => {
@@ -330,18 +223,7 @@ document.body.addEventListener("click", event => {
   }
 });
 
-function quizOver(){
-   mainEl.textContent = "QUIZ COMPLETE!!";
-  //  choiceboxE1.textContent="Your Final Score = " + totalScore;
-   timerEl.textContent="";
-   answerEl.textContent = "";
-  //Enter Initials into form
-   var input = document.createElement("input");
-   input.type = "text";
-   input.name = "initials";
-   input.label = "Enter Initials";
-   answerEl.append(input);
-}
+
 
 
 
