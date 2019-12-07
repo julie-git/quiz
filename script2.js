@@ -51,7 +51,6 @@ var secondsLeft = totalSeconds;
 // $.getScript("questions.js", function() {
 //   alert("Script loaded but not necessarily executed.");
 // });
-console.log(welcomeEl);
 // console.log(questions);
 // console.log(questions[0].title);
 //  console.log("questions[0].choices= "+ questions[0].choices);
@@ -60,8 +59,6 @@ console.log(welcomeEl);
 // console.log("question 3 title:" +  questions[3].title);
 // console.log("questions.length="+ questions.length);
 // console.log(answerEl);
-
-
 
 
 function startTimer() {
@@ -75,8 +72,6 @@ function startTimer() {
       secondsLeft = totalSeconds - secondsElapsed;
       console.log('secondsLeft =' +secondsLeft );
       showTime();
-      // timerEl.textContent = secondsLeft + " seconds remaining to complete quiz";
-      // showquestions();
       if(totalSeconds-secondsElapsed<=0 ){
         clearInterval(qinterval);
          console.log("quiz over");
@@ -184,7 +179,7 @@ function quizOver(){
   timerEl.textContent="";
   answerEl.textContent = "";
   choiceboxE1.innerHTML = "";
- //Enter Initials into form
+ //Create Form to enter initials
   var input = document.createElement("input");
   input.type = "text";
   input.name = "initials";
@@ -193,6 +188,11 @@ function quizOver(){
   labelinit.innerHTML = "Enter Initials";
   answerEl.append(input);
   answerEl.prepend(labelinit);
+  //Create button
+  var initBtn = document.createElement("button");
+  initBtn.textContent = "Submit";
+  initBtn.id="initalBtn";
+  answerEl.append(initBtn);
 }
 
 
@@ -214,8 +214,7 @@ document.body.addEventListener("click", event => {
     console.log("Clicked", event.target.value);
     userAnswer = event.target.value;
     console.log("userAnser = " + userAnswer);
-    // clearInterval(qInterval);
-    
+   
     //call function to check answer and update scores
     checkAnswers();
     // questionIndex++;
