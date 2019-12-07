@@ -28,13 +28,33 @@ body{
   /* height: 25px; */
 }
 
-#choicebox{
-  position:  absolute;
-  top : 300px;
+/* #choicebox{ */
+  /* position:  absolute; */
+  /* top : 300px;
   left: 700px;
   width: 400px;
-  height:300px;
+  height:300px; */
   /* border:1px solid black; */
+/* } */
+
+header{
+  display: flex;
+  justify-content: space-between;
+}
+
+#choicebox{
+  display: flex;
+  width: 100%;
+  height: auto;
+  flex-wrap: wrap;
+  flex-direction: column;
+}
+
+.choices input{
+  display: block;
+  width: 45%;
+  /* position: relative; */
+  margin : 0 auto;
 }
 
 #choicebox input{
@@ -52,13 +72,17 @@ body{
 input{
   display: block;
   width: 45%;
-  position: relative;
+  /* position: relative; */
   margin : 0 auto;
    
 }
 
 #countdown{
   margin-right: 20px;
+}
+
+#highscore{
+  margin-left: 20px;
 }
 
 .choices{

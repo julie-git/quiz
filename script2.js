@@ -36,9 +36,10 @@ var choiceboxE1 = document.getElementById("choicebox");
 var totalScoreEl = document.getElementById("totalscore");
 var answerEl = document.getElementById("answerbox");
 var welcomeEl = document.querySelector("h1");
+var highscoreEl = document.getElementById("highscore");
 
 var totalScore = 0;
-var highestScore = 0;
+var highScore = 0;
 var questPerMillisecond = 10000; //time between questions
 var questionIndex = 0;
 var userAnswer = "";
@@ -58,7 +59,7 @@ var secondsLeft = totalSeconds;
 // console.log(questions[0].answer);
 // console.log("question 3 title:" +  questions[3].title);
 // console.log("questions.length="+ questions.length);
-// console.log(answerEl);
+ console.log(highscoreEl);
 
 
 function startTimer() {
@@ -122,18 +123,22 @@ function displayChoices()
    var buttonsToCreate, buttonContainer, newButton;
 	for(var i=0; i< data.length; i++)
 	{
-		dataList=data[i];
-		newButton = document.createElement('input');
-          newButton.type = 'button';
-          newButton.value = data[i];
-          newButton.id = data[i];
-          newButton.onclick = function () {
-            console.log('You pressed '+this.id);
-            console.log('You pressed '+this.value);
-            return this.value;
-            
-          };
-          choiceboxE1.append(newButton);
+    dataList=data[i];
+    // newPTag = document.createElement('p');
+     newButton = document.createElement('input');
+     newButton.type = 'button';
+     newButton.value = data[i];
+     newButton.id = data[i];
+
+     newButton.onclick = function () {
+      console.log('You pressed '+this.id);
+      console.log('You pressed '+this.value);
+      return this.value;
+           
+      };
+      //  newPTag.append(newButton);
+      //  choiceboxE1.append(newPTag);
+       choiceboxE1.append(newButton);
   }
   //stop timer
   // clearInterval(qinterval);
@@ -144,6 +149,10 @@ function showTime(){
   timerEl.textContent = "Time : " + secondsLeft;
 }
 
+function showHighscore(){
+  highscoreEl.textContent = "High Score : " + highScore;
+}
+
 function checkAnswers(){
    var questionAnswer = questions[questionIndex].answer;
    console.log("checkAnswer: questionAnswer=" + questionAnswer)
@@ -152,33 +161,30 @@ function checkAnswers(){
       totalScore++;
       console.log("checkAnswer: totalScore" + totalScore);
       answerEl.textContent = "Correct";
-      // alert("Answer was Correct!!");
+      
    }else{
-    //  alert("Answer is wrong!!");
-      answerEl.textContent = "That answer is incorrect.";
+      answerEl.textContent = "Wrong.";
       //deduct 15 seconds from totalTime as penalty
       totalSeconds = totalSeconds -15;
    }
     updateTotalScore();
     userAnswer = "";
     questionIndex++;
-    // if (questionIndex < questions.length-1){
-    //   questionIndex++;
-    // }
-
-    // clearInterval(qInterval);
-}
+  }
+  
 
 function updateTotalScore(){
-  totalScoreEl.textContent= "The Total Score: " + totalScore;
+  totalScoreEl.textContent= "Your Score: " + totalScore;
 }
 
 function quizOver(){
-  mainEl.textContent = "QUIZ COMPLETE!!";
- //  choiceboxE1.textContent="Your Final Score = " + totalScore;
+  
+ // Clear screen
   timerEl.textContent="";
   answerEl.textContent = "";
   choiceboxE1.innerHTML = "";
+  mainEl.textContent = "QUIZ COMPLETE!!";
+  updateTotalScore();
  //Create Form to enter initials
   var input = document.createElement("input");
   input.type = "text";
@@ -200,15 +206,16 @@ function quizOver(){
 //buttonEl.addEventListener("click",startquiz);
 buttonEl.addEventListener("click",function(event){
   event.preventDefault();
-  buttonEl.style.visibility = 'hidden'; // hide Start Quiz button
+  buttonEl.style.visibility = 'hidden'; // hide Start Quiz button after clicking
   welcomeEl.textContent = "";
   showTime();
+  showHighscore();
   startTimer();
   showquestions();
  
 });
 
-//Event Lister to check if an answer is clicked.
+//Event Lister to check if an answer button is clicked.
 document.body.addEventListener("click", event => {
   if (event.target.nodeName == "INPUT") {
     console.log("Clicked", event.target.value);
@@ -217,8 +224,12 @@ document.body.addEventListener("click", event => {
    
     //call function to check answer and update scores
     checkAnswers();
-    // questionIndex++;
-    showquestions();
+    console.log("comeback from checkanswers");
+    //set brief pause for answers to display with the question
+    setTimeout(showquestions(), 10000);
+
+    
+    // showquestions();
   }
 });
 
