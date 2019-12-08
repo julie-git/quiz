@@ -47,6 +47,7 @@ var totalSeconds = 75;
 var secondsElapsed = 0;
 var qinterval;
 var secondsLeft = totalSeconds;
+var evtFired = false;
 
 
 // $.getScript("questions.js", function() {
@@ -89,11 +90,11 @@ function startTimer() {
 function showquestions() {
   console.log("called showquestions");
   console.log('showquestions:' + questionIndex );
+  //clear answer result 
+  answerEl.textContent = "";
   if (questionIndex < questions.length){
   // myTimer();
       mainEl.append(bodyEl);
-
-  
       mainEl.textContent = "";
        console.log("showquestion questionIndex =" + questionIndex);
       console.log(questions[questionIndex]);
@@ -110,8 +111,7 @@ function showquestions() {
 
 
 
-function displayChoices()
-{
+function displayChoices(){
   var data = questions[questionIndex].choices;
 	// var output="";
 	// var output2="";
@@ -157,6 +157,8 @@ function checkAnswers(){
    var questionAnswer = questions[questionIndex].answer;
    console.log("checkAnswer: questionAnswer=" + questionAnswer)
    console.log("checkAnswer: userAnswer=" + userAnswer);
+   //clear the question from the screen
+  //  choiceboxE1.innerHTML = "";
   if (userAnswer === questionAnswer){
       totalScore++;
       console.log("checkAnswer: totalScore" + totalScore);
@@ -216,7 +218,8 @@ buttonEl.addEventListener("click",function(event){
 });
 
 //Event Lister to check if an answer button is clicked.
-document.body.addEventListener("click", event => {
+ document.body.addEventListener("click", event => {
+// document.body.addEventListener("click", answerClicked(event) )
   if (event.target.nodeName == "INPUT") {
     console.log("Clicked", event.target.value);
     userAnswer = event.target.value;
@@ -225,16 +228,42 @@ document.body.addEventListener("click", event => {
     //call function to check answer and update scores
     checkAnswers();
     console.log("comeback from checkanswers");
-    //set brief pause for answers to display with the question
-    setTimeout(showquestions(), 10000);
 
-    
+    //set brief pause for answers to display with the question
+    // setTimeout(showquestions(), 10000);
+    // evtFired = true;
+    questionsTimeout();
     // showquestions();
   }
 });
 
 
 
+// function answerClicked(event){
+//   console.log(event);
+//   if (event.target.nodeName == "INPUT") {
+//     console.log("Clicked", event.target.value);
+//     userAnswer = event.target.value;
+//     console.log("userAnser = " + userAnswer);
+   
+//     //call function to check answer and update scores
+//     checkAnswers();
+//     evtFired = true;
+//     console.log("comeback from checkanswers");
+//     //set brief pause for answers to display with the question
+//     // setTimeout(showquestions(), 10000);
+// }
+// }
+function questionsTimeout(){
+setTimeout(function() {
+  console.log("inside timeout");
+  // if (evtFired) {
+    // console.log("timeout event fired true");
+    showquestions();
+    
+  // }
+}, 1000);
+}
 
 
 
