@@ -89,3 +89,6 @@ input{
   display: flex;
 }
 
+#initalBtn{
+  margin-top: 20px;
+}
