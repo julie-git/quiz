@@ -37,6 +37,9 @@ var totalScoreEl = document.getElementById("totalscore");
 var answerEl = document.getElementById("answerbox");
 var welcomeEl = document.querySelector("h1");
 var highscoreEl = document.getElementById("highscore");
+var submitBtnEl = document.getElementById("initbtn");
+var playBtn = document.getElementById("playbtn");
+var clearBtn = document.getElementById("clearbtn");
 
 var totalScore = 0;
 var highScore = 0;
@@ -48,7 +51,10 @@ var secondsElapsed = 0;
 var qinterval;
 var secondsLeft = totalSeconds;
 var evtFired = false;
-
+var playerInitials = "";
+var initBtn;
+var labelinit;
+var input;
 
 // $.getScript("questions.js", function() {
 //   alert("Script loaded but not necessarily executed.");
@@ -62,6 +68,9 @@ var evtFired = false;
 // console.log("questions.length="+ questions.length);
  console.log(highscoreEl);
 
+ submitBtnEl.style.visibility = 'hidden';
+ clearBtn.style.visibility = 'hidden';
+ playBtn.style.visibility = 'hidden';
 
 function startTimer() {
     // Write code to start the timer here
@@ -180,7 +189,9 @@ function updateTotalScore(){
 }
 
 function quizOver(){
-  
+  console.log("quiz over");
+  // stop timer;
+  clearInterval(qinterval);
  // Clear screen
   timerEl.textContent="";
   answerEl.textContent = "";
@@ -188,82 +199,221 @@ function quizOver(){
   mainEl.textContent = "QUIZ COMPLETE!!";
   updateTotalScore();
  //Create Form to enter initials
-  var input = document.createElement("input");
+  // var input = document.createElement("input");
+  input = document.createElement("input");
   input.type = "text";
   input.name = "initials";
+  input.id = "initials";
   input.label = "Enter Initials";
-  var labelinit = document.createElement("Label");
+  // var labelinit = document.createElement("Label");
+  labelinit = document.createElement("Label");
   labelinit.innerHTML = "Enter Initials";
   answerEl.append(input);
   answerEl.prepend(labelinit);
   //Create button
-  var initBtn = document.createElement("button");
-  initBtn.textContent = "Submit";
-  initBtn.id="initalBtn";
-  answerEl.append(initBtn);
+  // initBtn = document.createElement("button");
+  // // var initBtn = document.createElement("button");
+  // initBtn.textContent = "Submit";
+  // initBtn.id="initialBtn";
+  // answerEl.append(initBtn);
+  submitBtnEl.style.visibility = "visible";
 }
 
+function questionsTimeout(){
+  setTimeout(function() {
+    console.log("inside timeout");
+    // if (evtFired) {
+      // console.log("timeout event fired true");
+      showquestions();
+      
+    // }
+  }, 1000);
+  }
+
+  // function storeScore(){
+  //   // Check browser support
+  //   if (typeof(Storage) !== "undefined") {
+  //     // Store
+  //     localStorage.setItem(initials, totalScore);
+      
+  //     // Retrieve
+  //     document.getElementById("result").innerHTML = localStorage.getItem("lastname");
+  //   } else {
+  //     document.getElementById("result").innerHTML = "Sorry, your browser does not support Web Storage...";
+  //   }
+  //   }
+
+   function showEndGame(){
+    var keyname="";
+    var keyvalue="";
+    var highplayerArr= [];
+    var top3PlayerArr = [
+      {
+        player: "",
+        score: ""
+      },
+      {
+        player: "",
+        score: ""
+      },
+      {
+        player: "",
+        score: ""
+      }
+    ];
+
+    mainEl.textContent = "High Scores"
+    clearBtn.style.visibility = 'visible';
+     playBtn.style.visibility = 'visible';
+    //To Do Function that creates list of winners
+      localStorage.setItem(playerInitials,totalScore);
+       console.log("showEndGame: stored playerInit and totalscore: " + playerInitials + " " + totalScore);
+       console.log(localStorage.length);
+     //get top 3. highest scores from local storage
+     for (var i = 0; i < localStorage.length; i++){
+        var player   = localStorage.key(i);
+         var score = localStorage.getItem(player);
+          highplayerArr.push(score);
+
+        console.log("key = " + player + "  score = " + score);
+      }
+      //sort scores highest to lowast
+      console.log("before" + highplayerArr);
+      highplayerArr.sort(function(a, b){return b-a});
+      console.log("After sort " + highplayerArr);
+
+      // var maxScore = 0; var maxCount = 3 varArrayInd= 0; var i2=0;
+      // for (var i = 0; i < localStorage.length; i++){
+      //    var player   = localStorage.key(i);
+      //    var score = localStorage.getItem(player);
+      //    console.log("i=" + i + " key = " + player + "  score = " + score);
+      //    if (score >= maxScore){
+      //        MaxScore = score;
+      //         console.log("Maxsore = " + MaxScore);
+      //         i2++;
+      //        //loop through remaining values for more matches
+      //        for(i2 )
+      //    }
+
+      // }
+     
+      var topIndex = 0; var done = false;
+      for (var i = 0; i < 3; i++){
+        console.log("done = " + done);
+        if (done === true){ 
+          break;
+        }
+        var findScore = highplayerArr[i];
+        
+        console.log("i= " + i);
+        console.log("finscore=" + findScore);
+        for (var i2 = 0; i2 < localStorage.length; i2++){
+          if (done === true){ break;}
+          console.log("i2= " + i2);
+          var player   = localStorage.key(i2);
+          var score = localStorage.getItem(player);
+          //find the key in local storage with the matching score;
+          if (score === findScore){
+            //add to top3 arry arr
+              console.log("mathed score" + findScore)
+              console.log("storgeIndex = " + i2)
+              console.log("matched i" + i);
+              console.log("matched "  + player + "  " + score);
+              console.log("topIndex= " + topIndex);
+              top3PlayerArr[topIndex].player = player;
+              top3PlayerArr[topIndex].score = score;
+              topIndex++;
+              if( topIndex > 2) {done = true; break;}
+          }
+        }
+      } 
+     
+    console.log(top3PlayerArr);
+
+   }
+
+   function startquiz(){
+    buttonEl.style.visibility = 'hidden'; // hide Start Quiz button after clicking
+    //welcomeEl.textContent = "";
+    submitBtnEl.style.visibility = 'hidden';
+    clearBtn.style.visibility = 'hidden';
+    playBtn.style.visibility = 'hidden';
+    mainEl.textContent="";
+    answerEl.innerHTML="";
+    totalScoreEl.textContent="";
+   
+    showTime();
+    startTimer();
+    showquestions();
+   }
 
 //Listen for Start quiz button event.  Display first question, start timer
 //buttonEl.addEventListener("click",startquiz);
 buttonEl.addEventListener("click",function(event){
   event.preventDefault();
-  buttonEl.style.visibility = 'hidden'; // hide Start Quiz button after clicking
-  welcomeEl.textContent = "";
-  showTime();
-  showHighscore();
-  startTimer();
-  showquestions();
+  startquiz();
+  // buttonEl.style.visibility = 'hidden'; // hide Start Quiz button after clicking
+  // welcomeEl.textContent = "";
+  // showTime();
+  // showHighscore();
+  // startTimer();
+  // showquestions();
  
 });
 
 //Event Lister to check if an answer button is clicked.
- document.body.addEventListener("click", event => {
+//  document.body.addEventListener("click", event => {
+  choiceboxE1.addEventListener("click", event => {
 // document.body.addEventListener("click", answerClicked(event) )
   if (event.target.nodeName == "INPUT") {
-    console.log("Clicked", event.target.value);
+    console.log("Inside handler Clicked", event.target.value);
     userAnswer = event.target.value;
     console.log("userAnser = " + userAnswer);
    
     //call function to check answer and update scores
     checkAnswers();
     console.log("comeback from checkanswers");
-
+    console.log("inside answer listener click evt: questionindex=" + questionIndex);
+    if (questionIndex < questions.length){
     //set brief pause for answers to display with the question
     // setTimeout(showquestions(), 10000);
     // evtFired = true;
-    questionsTimeout();
-    // showquestions();
+    
+       questionsTimeout();
+    }else{
+      console.log("inside answer listener click run quizOver");
+      //game over
+      quizOver();
+    }
+  
   }
 });
 
+//event listener for submtting initials and score s
+submitBtnEl.addEventListener("click", function(event) {
+  event.preventDefault();
+   console.log("clicked submit initials");
+  playerInitials = document.getElementById("initials").value
+  console.log(playerInitials);
+  //hide form and button
+  answerEl.innerHTML = "";
+  submitBtnEl.style.visibility = "hidden";
+   showEndGame();
+ });
 
+//evenListener for clearing scores
+clearBtn.addEventListener("click", function(event) {
+  event.preventDefault();
+  localStorage.clear();
+  console.log("local storage cleared");
+  alert("All Scores Cleared");
 
-// function answerClicked(event){
-//   console.log(event);
-//   if (event.target.nodeName == "INPUT") {
-//     console.log("Clicked", event.target.value);
-//     userAnswer = event.target.value;
-//     console.log("userAnser = " + userAnswer);
-   
-//     //call function to check answer and update scores
-//     checkAnswers();
-//     evtFired = true;
-//     console.log("comeback from checkanswers");
-//     //set brief pause for answers to display with the question
-//     // setTimeout(showquestions(), 10000);
-// }
-// }
-function questionsTimeout(){
-setTimeout(function() {
-  console.log("inside timeout");
-  // if (evtFired) {
-    // console.log("timeout event fired true");
-    showquestions();
-    
-  // }
-}, 1000);
-}
+});
 
+playBtn.addEventListener("click", function(event) {
+  event.preventDefault();
+  console.log("clicked on play again button");
+  startquiz();
 
+});
 
