@@ -71,7 +71,7 @@ var input;
  submitBtnEl.style.visibility = 'hidden';
  clearBtn.style.visibility = 'hidden';
  playBtn.style.visibility = 'hidden';
-
+ 
 function startTimer() {
     // Write code to start the timer here
     console.log("startTimer");
@@ -333,6 +333,7 @@ function questionsTimeout(){
    }
 
    function startquiz(){
+     console.log("startquiz");
     buttonEl.style.visibility = 'hidden'; // hide Start Quiz button after clicking
     //welcomeEl.textContent = "";
     submitBtnEl.style.visibility = 'hidden';
@@ -413,7 +414,8 @@ clearBtn.addEventListener("click", function(event) {
 playBtn.addEventListener("click", function(event) {
   event.preventDefault();
   console.log("clicked on play again button");
-  startquiz();
+  window.open("https://julie-git.github.io/quiz/");
+  
 
 });
 
